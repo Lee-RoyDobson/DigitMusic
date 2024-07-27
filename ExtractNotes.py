@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 def extract_notes(xml_file):
-    """ Extracts the notes from the xml file and returns a list of notes as strings """
+    """ Extracts the notes and duration from the xml file and returns a string tuple of notes and duration """
 
     # Parse the xml file and get an element tree
     tree = ET.parse(xml_file)
@@ -15,8 +15,13 @@ def extract_notes(xml_file):
         # Check if the note has a pitch element
         pitch = note.find("pitch")
         if pitch:
-            # Add the step (note) to the list
-            notes.append( pitch.find("step").text )
+            # Get the step (note) from the pitch element
+            step = pitch.find("step").text 
+
+            # Get the duration of the note
+            duration = note.find("type").text
+            
+            notes.append( (step, duration) )
     
     return notes
 
