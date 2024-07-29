@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrow Notes</title>
+    <style>
+        .note {
+            display: inline-block;
+            margin: 5px;
+        }
+        .note img {
+            width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="notes-container"></div>
+   
+    <script>
+        // Fetch notes from notes.json and display them
+        async function fetchNotes() {
+            // Try to fetch notes from notes.json
+            const response = await fetch('notes.json');
+            // Convert the response to JSON
+            const notes = await response.json();
+            // Get the notes container
+            const container = document.getElementById('notes-container');
+
+            
+            notes.forEach(note => {
+                // Create a div element for the note
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'note';
+
+                // Create an image element for the note
+                const img = document.createElement('img');
+                // Set the src and alt attributes of the image
+                img.src = `arrow_notes/${note[0]}/${note[1]}.png`; 
+                img.alt = `${note[0]} ${note[1]}`;
+
+                // Append the image to the note div
+                noteDiv.appendChild(img);
+                container.appendChild(noteDiv);
+            });
+        }
+
+        fetchNotes();
+    </script>
+</body>
+</html>
