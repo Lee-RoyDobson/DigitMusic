@@ -12,11 +12,17 @@
     background-color: #f0f0f0; /* Light gray background */
     border-radius: 8px; /* Rounded corners */
     padding: 10px; /* Some padding inside the note group */
-    margin: 0 auto 10px auto; /* Center the note group and add space below */
-    max-width: 460px; /* Set a maximum width */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .note-group p {
     margin: 0; /* Remove default margin from paragraphs inside note groups */
+}
+
+.notes-container {
+    padding: 20px; /* Add some padding around the notes container */
+    background-color: #afafaf; /* Light gray background */
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 20px; /* Add some space between the note groups */
+
 }
