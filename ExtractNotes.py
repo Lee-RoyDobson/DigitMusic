@@ -14,7 +14,7 @@ arrow_note_map = {
     "E": "NW"
 }
 
-def save_to_html(notes, filename):
+def save_to_html(notes, filename, group_size=3):
     """ Writes the notes to an HTML file no return value """
     html_content = None
     # Read the index.html file
@@ -31,19 +31,28 @@ def save_to_html(notes, filename):
     container.clear()
 
     # Create div and img elements for each note and append them to the container
-    for note in notes:
-        # Create a div element for the note
-        note_div = soup.new_tag("div", **{"class": "note"})
+    for i in range(0, len(notes), group_size):
+        # Create a sub div element for the group of notes
+        sub_div = soup.new_tag("div", **{"class": "note-group"})
+        
+        for note in notes[i:i+group_size]:
+            # Create a div element for the note
+            note_div = soup.new_tag("div", **{"class": "note"})
 
-        # Create an image element for the note
-        img = soup.new_tag("img", src=f"arrow_notes/{note[0]}/{note[1]}.png", alt=f"{note[0]} {note[1]}")
+            # Create an image element for the note
+            img = soup.new_tag("img", src=f"arrow_notes/{note[0]}/{note[1]}.png", alt=f"{note[0]} {note[1]}")
 
-        # Append the image to the note div
-        note_div.append(img)
-        container.append(note_div)
+            # Append the image to the note div
+            note_div.append(img)
 
-    # Write the modified HTML back to index.html
-    with open("index.html", "w", encoding="utf-8") as file:
+            # Append the note div to the sub div
+            sub_div.append(note_div)
+        
+        # Append the sub div to the container
+        container.append(sub_div)
+
+    # Write the modified HTML back to the file
+    with open(filename, "w", encoding="utf-8") as file:
         file.write(str(soup))
 
 
@@ -105,7 +114,7 @@ def extract_notes(xml_file):
 if __name__ == "__main__":
     notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml")
 
-    save_to_html(notes, "index.html")
+    save_to_html(notes, "index.html", 4)
     
     for note in notes:
         print(note)
