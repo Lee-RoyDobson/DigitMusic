@@ -21,8 +21,9 @@
 .notes-container {
     padding: 20px; /* Add some padding around the notes container */
     background-color: #afafaf; /* Light gray background */
+    border-radius: 8px; /* Rounded corners */
     display: grid; /* Use grid layout */
     grid-template-columns: repeat(2, 1fr); /* Two columns */
-    gap: 20px; /* Add some space between the note groups */
+    gap: 5px; /* Add some space between the note groups */
 
 }
