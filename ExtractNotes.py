@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from collections import Counter
+from bs4 import BeautifulSoup
 import json
 
 # Dictionary to map the notes to the direction
@@ -13,16 +14,38 @@ arrow_note_map = {
     "E": "NW"
 }
 
-def save_notes_to_json(notes, filename):
-    """ Writes the notes to a JSON file no return value """
+def save_to_html(notes, filename):
+    """ Writes the notes to an HTML file no return value """
+    html_content = None
+    # Read the index.html file
+    with open("index.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
 
-    # Clear the JSON file if it exists
-    with open("notes.json", "w") as f:
-        pass
+    # Parse the HTML content
+    soup = BeautifulSoup(html_content, "html.parser")
 
-    # Write the notes to the JSON file
-    with open("notes.json", "w") as f:
-        json.dump(notes, f)
+    # Get the notes container
+    container = soup.find(id="notes-container")
+
+    # Clear the container to get rid of any existing notes
+    container.clear()
+
+    # Create div and img elements for each note and append them to the container
+    for note in notes:
+        # Create a div element for the note
+        note_div = soup.new_tag("div", **{"class": "note"})
+
+        # Create an image element for the note
+        img = soup.new_tag("img", src=f"arrow_notes/{note[0]}/{note[1]}.png", alt=f"{note[0]} {note[1]}")
+
+        # Append the image to the note div
+        note_div.append(img)
+        container.append(note_div)
+
+    # Write the modified HTML back to index.html
+    with open("index.html", "w", encoding="utf-8") as file:
+        file.write(str(soup))
+
 
 def note_to_direction(step, octave, base_octave):
     """ Maps the note to a direction based on the base octave and returns the direction as a string """
@@ -82,7 +105,7 @@ def extract_notes(xml_file):
 if __name__ == "__main__":
     notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml")
 
-    save_notes_to_json(notes, "notes.json")
+    save_to_html(notes, "index.html")
     
     for note in notes:
         print(note)
