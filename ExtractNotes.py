@@ -126,7 +126,8 @@ def extract_notes(xml_file):
 
 
 if __name__ == "__main__":
-    notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml")
+    notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Viola_CMPSR 2.xml")
+    #notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml")
 
     save_to_html(notes, "index.html", 4)
     
