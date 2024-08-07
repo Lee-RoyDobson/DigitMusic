@@ -1,5 +1,6 @@
 .note {
-    display: inline-block; /* Display the note as an inline element */
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Arrange the content in a column */
     margin: 5px; /* Add some margin around the note */
 }
 
@@ -12,6 +13,9 @@
     background-color: #f0f0f0; /* Light gray background */
     border-radius: 8px; /* Rounded corners */
     padding: 10px; /* Some padding inside the note group */
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Center the content vertically */
+    flex-direction: row; /* Arrange the content in a row */
 }
 
 .note-group p {
@@ -26,4 +30,8 @@
     grid-template-columns: repeat(2, 1fr); /* Two columns */
     gap: 5px; /* Add some space between the note groups */
 
+}
+
+.note-number {
+    text-align: center; /* Center the text */
 }

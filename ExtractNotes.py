@@ -30,35 +30,41 @@ def save_to_html(notes, filename, group_size=3):
     # Clear the container to get rid of any existing notes
     container.clear()
 
-    # Create a wrapper div to hold the note groups side by side
-    # wrapper_div = soup.new_tag("div", **{"class": "note-groups-wrapper"})
-
     # Create div and img elements for each note and append them to the container
     for i in range(0, len(notes), group_size):
         # Create a sub div element for the group of notes
-        sub_div = soup.new_tag("div", **{"class": "note-group"}) # ** is for unpacking the dict
+        note_group_div = soup.new_tag("div", **{"class": "note-group"}) # ** is for unpacking the dict
+
+        cur_note = 1 # Counter for the current note
         
         for note in notes[i:i+group_size]:
             # Create a div element for the note
             note_div = soup.new_tag("div", **{"class": "note"})
 
+            # Create a span element for the note number
+            note_number = soup.new_tag("span", **{"class": "note-number"})
+
+            # Set the note number text
+            note_number.string = str(cur_note)
+
+            cur_note += 1
+
             # Create an image element for the note
             img = soup.new_tag("img", src=f"arrow_notes/{note[0]}/{note[1]}.png", alt=f"{note[0]} {note[1]}")
+
+            # Append the note number to the note div
+            note_div.append(note_number)
 
             # Append the image to the note div
             note_div.append(img)
 
             # Append the note div to the sub div
-            sub_div.append(note_div)
+            note_group_div.append(note_div)
 
-            # Append the sub div to the container
-            container.append(sub_div)
+            # Append the note group div to the container
+            container.append(note_group_div)
         
       
-        
-
-    
-
     # Write the modified HTML back to the file
     with open(filename, "w", encoding="utf-8") as file:
         file.write(str(soup))
