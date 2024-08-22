@@ -3,9 +3,8 @@ from collections import Counter
 from bs4 import BeautifulSoup
 import json
 
-# Dictionary to map the notes to the direction
-note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-note_pattern = [2, 2, 1, 2, 2, 2, 1]
+
+
 
 def save_to_html(notes, filename, group_size=4):
     """ Writes the notes to an HTML file no return value """
@@ -62,17 +61,19 @@ def save_to_html(notes, filename, group_size=4):
     with open(filename, "w", encoding="utf-8") as file:
         file.write(str(soup))
 
-def note_to_direction(step, octave, base_octave, key):
+def note_to_direction(step, octave, base_octave, note_map):
     """ Maps the note to a direction based on the base octave and returns the direction as an integer """
 
-    note = arrow_note_map.get(step, "Unknown")
-    # Check if the note is 1 and an octave higher than the base octave
+    # Get the note from the step
+    note = note_map.get(step, None)
+   
+    # Check if the note is 1 and the octave is greater than the base octave
     if note == 1 and int(octave) > base_octave:
         return 8
     
     return note
 
-def extract_notes(xml_file):
+def extract_notes(xml_file, note_scale, note_pattern):
     """ Extracts the notes and duration from the xml file and returns a string tuple of duration and arrow direction """
 
     # Parse the xml file and get an element tree
@@ -86,6 +87,9 @@ def extract_notes(xml_file):
     # Get the key of the music
     key = root.find(".//key").find("fifths").text
     key = int(key)
+    # Generate the note map
+    note_map = generate_note_scale(key, note_scale, note_pattern)
+    print(note_map)
 
     # Get all the note nodes from the xml file
     for note in root.findall(".//note"):
@@ -109,6 +113,7 @@ def extract_notes(xml_file):
         if pitch:
             # Get the step (note) from the pitch element
             step = pitch.find("step").text
+            print(step)
 
             # Get the octave of the note
             octave = pitch.find("octave").text
@@ -116,16 +121,43 @@ def extract_notes(xml_file):
             # Get the duration of the note
             duration = note.find("type").text
 
+            # Get the alter (check if sharp for now)
+            alter = pitch.find("alter")
+            if (alter is not None) and (alter.text == "1"):
+                step += "#"
+
             # Get the direction of the note
-            direction = note_to_direction(step, octave, base_octave)
+            direction = note_to_direction(step, octave, base_octave, note_map)
 
             notes.append((duration, direction))
     
     return notes
 
+def generate_note_scale(key, note_scale, note_pattern):
+    """ Generates a note scale based on the key and note pattern and returns a dictionary of the note and direction """
+    start_index = key
+    direction_count = 1
+    scale = {note_scale[start_index] : direction_count}
+    current_index = start_index
+    for step in note_pattern:
+        direction_count += 1
+        # Get the next index accounting for the length of the note scale
+        current_index = (current_index + step) % len(note_scale)
+        if note_scale[current_index] not in scale:
+            scale[note_scale[current_index]] = direction_count
+
+
+    return scale
+
+
+
 if __name__ == "__main__":
+    note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    note_pattern = [2, 2, 1, 2, 2, 2, 1]
+
     #notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Viola_CMPSR 2.xml")
-    notes = extract_notes("Arrownotes AI Assets\XML Files\D Major.xml")
+    notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
+    
 
     save_to_html(notes, "index.html", 4)
     
