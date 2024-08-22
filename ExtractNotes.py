@@ -5,13 +5,13 @@ import json
 
 # Dictionary to map the notes to the direction
 arrow_note_map = {
-    "D": "N",
-    "F": "NE",
-    "A": "E",
-    "C": "SE",
-    "B": "SW",
-    "G": "W",
-    "E": "NW"
+    "C": 1,
+    "D": 2,
+    "E": 3,
+    "F": 4,
+    "G": 5,
+    "A": 6,
+    "B": 7
 }
 
 def save_to_html(notes, filename, group_size=3):
@@ -70,11 +70,14 @@ def save_to_html(notes, filename, group_size=3):
         file.write(str(soup))
 
 def note_to_direction(step, octave, base_octave):
-    """ Maps the note to a direction based on the base octave and returns the direction as a string """
-    # Check if the note is D and an octave higher than the base octave
-    if step == "D" and int(octave) > base_octave:
-        return "S"
-    return arrow_note_map.get(step, "Unknown")
+    """ Maps the note to a direction based on the base octave and returns the direction as an integer """
+
+    note = arrow_note_map.get(step, "Unknown")
+    # Check if the note is 1 and an octave higher than the base octave
+    if note == 1 and int(octave) > base_octave:
+        return 8
+    
+    return note
 
 def extract_notes(xml_file):
     """ Extracts the notes and duration from the xml file and returns a string tuple of duration and arrow direction """
@@ -125,7 +128,7 @@ def extract_notes(xml_file):
 
 if __name__ == "__main__":
     #notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Viola_CMPSR 2.xml")
-    notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml")
+    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml")
 
     save_to_html(notes, "index.html", 4)
     
