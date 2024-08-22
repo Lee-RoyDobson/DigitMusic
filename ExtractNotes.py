@@ -135,14 +135,21 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
 def generate_note_scale(key, note_scale, note_pattern):
     """ Generates a note scale based on the key and note pattern and returns a dictionary of the note and direction """
-    start_index = key
+    # The key works out to be the starting index of the note scale
+    start_index = key 
+    # Start at direciton 1 (North)
     direction_count = 1
+    # Create the scale dictionary with the starting note
     scale = {note_scale[start_index] : direction_count}
     current_index = start_index
+
+    # Iterate over each step in the note pattern
     for step in note_pattern:
+        # Increment the direction count for the next direction
         direction_count += 1
         # Get the next index accounting for the length of the note scale
         current_index = (current_index + step) % len(note_scale)
+        # If the note at the current index is not already in the scale, add it
         if note_scale[current_index] not in scale:
             scale[note_scale[current_index]] = direction_count
 
