@@ -4,17 +4,10 @@ from bs4 import BeautifulSoup
 import json
 
 # Dictionary to map the notes to the direction
-arrow_note_map = {
-    "C": 1,
-    "D": 2,
-    "E": 3,
-    "F": 4,
-    "G": 5,
-    "A": 6,
-    "B": 7
-}
+note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-def save_to_html(notes, filename, group_size=3):
+def save_to_html(notes, filename, group_size=4):
     """ Writes the notes to an HTML file no return value """
     html_content = None
     # Read the index.html file
@@ -69,7 +62,7 @@ def save_to_html(notes, filename, group_size=3):
     with open(filename, "w", encoding="utf-8") as file:
         file.write(str(soup))
 
-def note_to_direction(step, octave, base_octave):
+def note_to_direction(step, octave, base_octave, key):
     """ Maps the note to a direction based on the base octave and returns the direction as an integer """
 
     note = arrow_note_map.get(step, "Unknown")
@@ -89,6 +82,10 @@ def extract_notes(xml_file):
     notes = []
     octaves = []
     base_octave = None
+
+    # Get the key of the music
+    key = root.find(".//key").find("fifths").text
+    key = int(key)
 
     # Get all the note nodes from the xml file
     for note in root.findall(".//note"):
@@ -128,7 +125,7 @@ def extract_notes(xml_file):
 
 if __name__ == "__main__":
     #notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Viola_CMPSR 2.xml")
-    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml")
+    notes = extract_notes("Arrownotes AI Assets\XML Files\D Major.xml")
 
     save_to_html(notes, "index.html", 4)
     
