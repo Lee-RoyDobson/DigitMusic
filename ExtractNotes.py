@@ -69,7 +69,6 @@ def save_to_html(notes, filename, group_size=3):
     with open(filename, "w", encoding="utf-8") as file:
         file.write(str(soup))
 
-
 def note_to_direction(step, octave, base_octave):
     """ Maps the note to a direction based on the base octave and returns the direction as a string """
     # Check if the note is D and an octave higher than the base octave
@@ -123,7 +122,6 @@ def extract_notes(xml_file):
             notes.append((duration, direction))
     
     return notes
-
 
 if __name__ == "__main__":
     #notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Viola_CMPSR 2.xml")
