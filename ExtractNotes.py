@@ -86,9 +86,10 @@ def extract_notes(xml_file, note_scale, note_pattern):
     # Get the key of the music
     key = find_key(int(root.find(".//key").find("fifths").text), root.find(".//key").find("mode").text)
     key = convert_to_standard(key)
+    print(key)
     # Generate the note map
     note_map = generate_note_scale(key, note_scale, note_pattern)
-    print(note_map)
+    #print(note_map)
 
     # Get all the note nodes from the xml file
     for note in root.findall(".//note"):
@@ -136,11 +137,11 @@ def extract_notes(xml_file, note_scale, note_pattern):
                 step = apply_alter(step, alter)
 
             step = convert_to_standard(step)
-            print(step)
+            #print(step)
 
             # Get the direction of the note
             direction = note_to_direction(step, octave, base_octave, note_map)
-            print(direction, step, octave)
+            #print(direction, step, octave)
 
             
             
@@ -191,7 +192,6 @@ def find_key(fiths, mode):
             case -6: return "Gb"
             case -7: return "Cb"
 
-
 def convert_to_standard(step):
     """ Converts the step to a standard note """
     match step:
@@ -214,16 +214,45 @@ def apply_alter(step, alter):
         step += "b"
     return step
 
+def test_if_correct(notes):
+    """ Tests if the notes are correct """
+    correct_notes = [("quarter", 1), ("quarter", 2), ("quarter", 3), ("quarter", 4), ("quarter", 5), ("quarter", 6), ("quarter", 7), ("quarter", 8), ("quarter", 8), ("quarter", 7), ("quarter", 6), ("quarter", 5), ("quarter", 4), ("quarter", 3), ("quarter", 2), ("quarter", 1)]
+    return notes == correct_notes
+
+def run_unit_tests(note_scale, note_pattern):
+    notes = extract_notes("Arrownotes AI Assets\XML Files\A Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\A Sharp Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\C Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\D Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\D Sharp Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\F Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\F Sharp Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+    notes = extract_notes("Arrownotes AI Assets\XML Files\G Sharp Major.xml", note_scale, note_pattern)
+    print(test_if_correct(notes))
+
+
 if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    notes = extract_notes("Arrownotes AI Assets\XML Files\G Sharp Major.xml", note_scale, note_pattern)
-    #notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
+    #notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
     
+    run_unit_tests(note_scale, note_pattern)
 
-    save_to_html(notes, "index.html", 4)
-    
-    for note in notes:
-        print(note)
+    #save_to_html(notes, "index.html", 4) 
     
