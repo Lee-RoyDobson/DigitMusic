@@ -81,7 +81,6 @@ def extract_notes(xml_file, note_scale, note_pattern):
     root = tree.getroot()
 
     notes = []
-    octaves = []
     base_octave = None
 
     # Get the key of the music
@@ -101,12 +100,12 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
             # Get the octave of the note
             octave = pitch.find("octave").text
-
-            # Convert the octave to an integer and append it to the list
-            octaves.append(int(octave))
-
-    # Determine the base octave (most common octave)
-    base_octave = Counter(octaves).most_common(1)[0][0]
+            if step == key:
+                if not base_octave:
+                    base_octave = int(octave)
+                elif int(octave) < base_octave:
+                    base_octave = int(octave)
+                
 
     for note in root.iter("note"):
         pitch = note.find("pitch")
