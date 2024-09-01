@@ -85,7 +85,7 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
     # Get the key of the music
     key = find_key(int(root.find(".//key").find("fifths").text), root.find(".//key").find("mode").text)
-    
+    key = convert_to_standard(key)
     # Generate the note map
     note_map = generate_note_scale(key, note_scale, note_pattern)
     print(note_map)
@@ -103,8 +103,11 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
             # Get the alter (check if sharp for now)
             alter = pitch.find("alter")
-            if (alter is not None) and (alter.text == "1"):
-                step += "#"
+            if alter is not None:
+                alter = alter.text
+                step = apply_alter(step, alter)
+            
+            step = convert_to_standard(step)
 
             if step == key:
                 if not base_octave:
@@ -118,7 +121,7 @@ def extract_notes(xml_file, note_scale, note_pattern):
         if pitch:
             # Get the step (note) from the pitch element
             step = pitch.find("step").text
-            print(step)
+            
 
             # Get the octave of the note
             octave = pitch.find("octave").text
@@ -128,12 +131,12 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
             # Get the alter (check if sharp for now)
             alter = pitch.find("alter")
-            if (alter is not None) and (alter.text == "1"):
-                step += "#"
-            elif (alter is not None) and (alter.text == "-1"):
-                step += "b"
+            if alter is not None:
+                alter = alter.text
+                step = apply_alter(step, alter)
 
             step = convert_to_standard(step)
+            print(step)
 
             # Get the direction of the note
             direction = note_to_direction(step, octave, base_octave, note_map)
@@ -203,12 +206,19 @@ def convert_to_standard(step):
         case "B#": return "C"
         case _: return step
         
+def apply_alter(step, alter):
+    """ Applies the alter to the step and returns the new step """
+    if (alter is not None) and (alter == "1"):
+        step += "#"
+    elif (alter is not None) and (alter == "-1"):
+        step += "b"
+    return step
 
 if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
+    notes = extract_notes("Arrownotes AI Assets\XML Files\G Sharp Major.xml", note_scale, note_pattern)
     #notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
     
 
