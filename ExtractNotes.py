@@ -111,7 +111,7 @@ def extract_notes(xml_file, note_scale, note_pattern):
                     base_octave = int(octave)
                 elif int(octave) < base_octave:
                     base_octave = int(octave)
-                
+
 
     for note in root.iter("note"):
         pitch = note.find("pitch")
@@ -130,11 +130,10 @@ def extract_notes(xml_file, note_scale, note_pattern):
             alter = pitch.find("alter")
             if (alter is not None) and (alter.text == "1"):
                 step += "#"
+            elif (alter is not None) and (alter.text == "-1"):
+                step += "b"
 
-            if step == "E#":
-                step = "F"
-            if step == "B#":
-                step = "C"
+            step = convert_to_standard(step)
 
             # Get the direction of the note
             direction = note_to_direction(step, octave, base_octave, note_map)
@@ -170,6 +169,7 @@ def generate_note_scale(key, note_scale, note_pattern):
     return scale
 
 def find_key(fiths, mode):
+    """ finds the key of the music based on the fiths and mode """
     if mode == "major":
         match fiths:
             case 0: return "C"
@@ -178,16 +178,37 @@ def find_key(fiths, mode):
             case 3: return "A"
             case 4: return "E"
             case 5: return "B"
-            case 6: return "F"
+            case 6: return "F#"
             case 7: return "C#"
+            case -1: return "F"
+            case -2: return "Bb"
+            case -3: return "Eb"
+            case -4: return "Ab"
+            case -5: return "Db"
+            case -6: return "Gb"
+            case -7: return "Cb"
 
 
+def convert_to_standard(step):
+    """ Converts the step to a standard note """
+    match step:
+        case "Cb": return "B"
+        case "Db": return "C#"
+        case "Eb": return "D#"
+        case "Fb": return "E"
+        case "Gb": return "F#"
+        case "Ab": return "G#"
+        case "Bb": return "A#"
+        case "E#": return "F"
+        case "B#": return "C"
+        case _: return step
+        
 
 if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml", note_scale, note_pattern)
+    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
     #notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
     
 
