@@ -100,6 +100,12 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
             # Get the octave of the note
             octave = pitch.find("octave").text
+
+            # Get the alter (check if sharp for now)
+            alter = pitch.find("alter")
+            if (alter is not None) and (alter.text == "1"):
+                step += "#"
+
             if step == key:
                 if not base_octave:
                     base_octave = int(octave)
@@ -125,10 +131,17 @@ def extract_notes(xml_file, note_scale, note_pattern):
             if (alter is not None) and (alter.text == "1"):
                 step += "#"
 
+            if step == "E#":
+                step = "F"
+            if step == "B#":
+                step = "C"
+
             # Get the direction of the note
             direction = note_to_direction(step, octave, base_octave, note_map)
             print(direction, step, octave)
 
+            
+            
             notes.append((duration, direction))
     
     return notes
@@ -174,7 +187,7 @@ if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
+    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml", note_scale, note_pattern)
     #notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
     
 
