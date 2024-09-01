@@ -85,8 +85,8 @@ def extract_notes(xml_file, note_scale, note_pattern):
     base_octave = None
 
     # Get the key of the music
-    key = root.find(".//key").find("fifths").text
-    key = int(key)
+    key = find_key(int(root.find(".//key").find("fifths").text), root.find(".//key").find("mode").text)
+    
     # Generate the note map
     note_map = generate_note_scale(key, note_scale, note_pattern)
     print(note_map)
@@ -128,6 +128,7 @@ def extract_notes(xml_file, note_scale, note_pattern):
 
             # Get the direction of the note
             direction = note_to_direction(step, octave, base_octave, note_map)
+            print(direction, step, octave)
 
             notes.append((duration, direction))
     
@@ -136,7 +137,7 @@ def extract_notes(xml_file, note_scale, note_pattern):
 def generate_note_scale(key, note_scale, note_pattern):
     """ Generates a note scale based on the key and note pattern and returns a dictionary of the note and direction """
     # The key works out to be the starting index of the note scale
-    start_index = key 
+    start_index = note_scale.index(key)
     # Start at direciton 1 (North)
     direction_count = 1
     # Create the scale dictionary with the starting note
@@ -156,13 +157,25 @@ def generate_note_scale(key, note_scale, note_pattern):
 
     return scale
 
+def find_key(fiths, mode):
+    if mode == "major":
+        match fiths:
+            case 0: return "C"
+            case 1: return "G"
+            case 2: return "D"
+            case 3: return "A"
+            case 4: return "E"
+            case 5: return "B"
+            case 6: return "F"
+            case 7: return "C#"
+
 
 
 if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    notes = extract_notes("Resources\Pachelbels Canon Parts\Pachelbels's Canon_Cello_CMPSR 4.xml", note_scale, note_pattern)
+    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
     #notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
     
 
