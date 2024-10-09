@@ -3,7 +3,8 @@ from collections import Counter
 from bs4 import BeautifulSoup
 import json
 
-
+note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
 
 def save_to_html(notes, filename, group_size=4):
@@ -214,45 +215,13 @@ def apply_alter(step, alter):
         step += "b"
     return step
 
-def test_if_correct(notes):
-    """ Tests if the notes are correct """
-    correct_notes = [("quarter", 1), ("quarter", 2), ("quarter", 3), ("quarter", 4), ("quarter", 5), ("quarter", 6), ("quarter", 7), ("quarter", 8), ("quarter", 8), ("quarter", 7), ("quarter", 6), ("quarter", 5), ("quarter", 4), ("quarter", 3), ("quarter", 2), ("quarter", 1)]
-    return notes == correct_notes
 
-def run_unit_tests(note_scale, note_pattern):
-    notes = extract_notes("Arrownotes AI Assets\XML Files\A Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\A Sharp Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\C Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\C Sharp Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\D Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\D Sharp Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\E Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\F Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\F Sharp Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\G Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-    notes = extract_notes("Arrownotes AI Assets\XML Files\G Sharp Major.xml", note_scale, note_pattern)
-    print(test_if_correct(notes))
-
-
+  
 if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
     notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
     
-    #run_unit_tests(note_scale, note_pattern)
-
     save_to_html(notes, "index.html", 4) 
     
