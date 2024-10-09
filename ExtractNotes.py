@@ -250,9 +250,9 @@ if __name__ == "__main__":
     note_scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     note_pattern = [2, 2, 1, 2, 2, 2, 1]
 
-    #notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
+    notes = extract_notes("Arrownotes AI Assets\XML Files\B Major.xml", note_scale, note_pattern)
     
-    run_unit_tests(note_scale, note_pattern)
+    #run_unit_tests(note_scale, note_pattern)
 
-    #save_to_html(notes, "index.html", 4) 
+    save_to_html(notes, "index.html", 4) 
     
