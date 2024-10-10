@@ -26,7 +26,7 @@ if __name__ == "__main__":
     root.title("Note Extractor")
 
     # Set minimum window size
-    root.minsize(150, 100)
+    root.minsize(300, 100)
 
     file_path_var = tk.StringVar()
 
